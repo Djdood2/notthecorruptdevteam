@@ -1,0 +1,345 @@
+author = "Jake Kostucha";
+onLoadName = "GoodOldDaysRP";
+onLoadMission = "GODA3L_V1.1";
+enableDebugConsole = 1;
+saving = 0;
+respawn = 3;
+disabledAI = 1;
+respawnTemplates[] = {"Base"};
+respawndelay = 5;
+respawnDialog = 0;
+respawnOnStart = -1;
+joinUnassigned = 1;
+disableChannels[]={0,1,2,3,4,6};
+class Header
+{
+    gameType = RPG;
+    minPlayers = 1;
+    maxPlayers = 122;
+};
+
+
+
+wreckLimit = 3;
+wreckRemovalMinTime = 60;
+wreckRemovalMaxTime = 320;
+corpseLimit = 150;
+corpseRemovalMinTime = 999;
+corpseRemovalMaxTime = 9999;
+
+showHUD[] = {
+	1,	// Scripted HUD (same as showHUD command)
+	1,	// Vehicle + soldier info
+	1,	// Vehicle radar [HIDDEN]
+	0,	// Vehicle compass [HIDDEN]
+	0,	// Tank direction indicator
+	0,	// Commanding menu
+	0,	// Group Bar
+	1	// HUD Weapon Cursors
+};
+
+#include "dialog\MasterHandler.h"
+#include "dialog\pickup.hpp"
+#include "dialog\openboard.hpp"
+#include "dialog\an_use.hpp"
+#include "dialog\an_intro.hpp"
+
+
+#include "maverick\maverick_master.cpp"
+class RscTitles {
+    #include "maverick\maverick_titles_master.cpp"
+
+    class an_hud {
+			idd = -1;
+			fadeout=0;
+			fadein=0;
+			duration = 999999;
+			name = "an_hud";
+			onLoad = "uiNamespace setVariable ['an_hud', _this select 0]";
+
+			class controlsBackground {
+				class an_hud_textBox: RscStructuredTextTest
+				{
+					idc = 1000;
+					text = "CASH: $50000 | BANK: $50000 | POLICE ONLINE: 10 | MEDICS ONLINE: 5 | WEBSITE: WWW.ARMA.NETWORK"; //--- ToDo: Localize;
+					x = -0.6275;
+					y = -0.404;
+					w = 2.275;
+					h = 0.04;
+					colorBackground[] = { 1, 1, 1, 0 };
+					class Attributes {
+						font = "PuristaMedium";
+						color = "#FFFFFF";
+						align = "center";
+						valign = "top";
+						shadow = 0;
+						shadowColor = "#ff0000";
+						size = "2";
+					};
+				};
+			};
+		};
+  
+	class an_alert {
+		idd = 15;
+		fadeout = 1;
+		fadein = 1;
+		duration = 10;
+		name = "an_alerts";
+		onLoad = "uiNamespace setVariable ['an_alert', _this select 0]";
+		
+		class controlsBackground {
+			class an_alert_text: RscStructuredTextTest
+			{
+				idc = 1100;
+				x = -0.7;
+				y = -0.14;
+				w = 0.4375;
+				h = 0.68;
+				colorBackground[] = {0,0,0,0};
+				class Attributes {
+				  font = "PuristaMedium";
+				  color = "#FF1A1A";
+				  align = "left";
+				  valign = "top";
+				  shadow = 0;
+				  shadowColor = "#FF1A1A";
+				  size = "3";
+				};
+			};
+		};
+	};
+    #include "CfgRemoteExec.hpp"
+    #include "maverick\tuning\dialogs\titles.hpp"
+    #include "dialog\progress.hpp"
+    #include "dialog\hud_nameTags.h"
+    #include "dialog\a3ljailhud.hpp"
+    #include "dialog\ALRP_Hud.hpp"
+    #include "maverick\talent-tree-modular\gui\_masterTitles.cpp"
+    #include "maverick\introcam\dialogs\title_status.hpp"
+};
+
+class CfgFunctions {
+    #include "Functions.h"
+    #include "maverick\maverick_functions_master.cpp"
+};
+
+class CfgSounds
+{
+    #include "maverick\navigation\sounds\voicepacks\male_en-en_1\sounds.cpp"
+
+    sounds[] = {};
+    class start
+    {
+        name = "start";
+        sound[] = {"@ALRPSounds\snds\start.ogg", 1, 1};
+        titles[] = {};
+    };
+    class alrp_notify
+    {
+        name = "alrp_notify";
+        sound[] = {"@ALRPSounds\snds\notify.ogg", 1, 1};
+        titles[] = {};
+    };
+	class siren
+    {
+        name = "siren";
+        sound[] = {"@ALRPSounds\snds\siren.ogg", 1, 1};
+        titles[] = {};
+    };
+    class endbeep
+    {
+        name = "endbeep";
+        sound[] = {"@ALRPSounds\snds\endbeep.ogg", 1, 1};
+        titles[] = {};
+    };
+    class panicbutton
+    {
+        name = "panicbutton";
+        sound[] = {"@ALRPSounds\snds\panicbutton.ogg", 1, 1};
+        titles[] = {};
+    };
+	class prisonalarm
+    {
+        name = "prisonalarm";
+        sound[] = {"@ALRPSounds\snds\new\prisonalarm.ogg", 1, 1};
+        titles[] = {};
+    };
+    class ssounds
+    {
+        name = "ssounds";
+        sound[] = {"@ALRPSounds\snds\ssounds.ogg", 1, 1};
+        titles[] = {};
+    };
+    class cuff
+    {
+        name = "cuff";
+        sound[] = {"@ALRPSounds\snds\new\cuff.ogg", 1, 1};
+        titles[] = {};
+    };
+    class win
+    {
+        name = "win";
+        sound[] = {"@ALRPSounds\snds\win.ogg", 1, 1};
+        titles[] = {};
+    };
+    class revived
+    {
+        name = "revived";
+        sound[] = {"@ALRPSounds\snds\revived.ogg", 1, 1};
+        titles[] = {};
+    };
+    class cough
+    {
+        name = "cough";
+        sound[] = {"@ALRPSounds\snds\new\cough.ogg", 1, 1};
+        titles[] = {};
+    };
+    class weed
+    {
+        name = "weed";
+        sound[] = {"@ALRPSounds\snds\new\weed.ogg", 1, 1};
+        titles[] = {};
+    };
+    class wedding
+    {
+        name = "wedding";
+        sound[] = {"@ALRPSounds\snds\new\wedding.ogg", 1, 1};
+        titles[] = {};
+    };
+    class spray
+    {
+        name = "spray";
+        sound[] = {"@ALRPSounds\snds\spray.ogg", 1, 1};
+        titles[] = {};
+    };
+    class ciggy
+    {
+        name = "ciggy";
+        sound[] = {"@ALRPSounds\snds\ciggy.ogg", 1, 1};
+        titles[] = {};
+    };
+};
+
+
+
+class CfgDebriefing
+{
+    class NotWhitelisted
+    {
+        title = "Not Whitelisted!";
+        subtitle = "You are not whitelisted!";
+        description = "Please contact a member of staff to be whitelisted.";
+        pictureBackground = "";
+        picture = "";
+        pictureColor[] = {0,0.3,0.6,1};
+    };
+
+    class Blacklisted
+    {
+        title = "Mission Failed";
+        subtitle = "You are blacklisted from cops";
+        description = "You are not allowed to be a cop due to previous actions and the admins have removed you from being a cop.";
+        pictureBackground = "";
+        picture = "";
+        pictureColor[] = {0,0.3,0.6,1};
+    };
+
+    class SpyGlass
+    {
+        title = "The SpyGlass sees you";
+        subTitle = "You were detected by the SpyGlass";
+        description = "You were detected for cheating and have been reported to the server. Enjoy your day.";
+        pictureBackground = "";
+        picture = "";
+        pictureColor[] = {0,0.3,0.6,1};
+    };
+
+    class Cunt
+    {
+        title = "Endmission is disabled!";
+        subTitle = "That feature is not currently enabled on this server.";
+        description = "Your gear has been wiped and a message has been sent to the admins to alert them of you attempting to do this. Enjoy your day.";
+        pictureBackground = "";
+        picture = "";
+        pictureColor[] = {0,0.3,0.6,1};
+    };
+};
+
+class CfgNotifications
+{
+    class MedicalRequestEmerg
+    {
+        title = "EMS Requested";
+        iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcon_ca.paa";
+        description = "%1";
+        duration = 5;
+        priority = 7;
+    };
+
+    class DeliveryAssigned
+    {
+        title = "Delivery Job Accepted";
+        iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcon_ca.paa";
+        description = "%1";
+        duration = 10;
+        priority = 7;
+    };
+
+    class DeliveryFailed
+    {
+        title = "Delivery Job Failed";
+        iconPicture = "\A3\ui_f\data\map\mapcontrol\taskiconfailed_ca.paa";
+        description = "%1";
+        duration = 7;
+        priority = 7;
+    };
+
+    class DeliverySucceeded
+    {
+        title = "Delivery Job Completed";
+        iconPicture = "\A3\ui_f\data\map\mapcontrol\taskIcondone_ca.paa";
+        description = "%1";
+        duration = 6;
+        priority = 6;
+    };
+
+    class TextMessage
+    {
+        title = "Received A Text Message";
+        iconPicture = "\ALRPClient\icons\messagenew.paa";
+        description = "%1";
+        duration = 10;
+        priority = 6;
+    };
+
+    class PoliceDispatch
+    {
+        title = "911 Dispatch Center";
+        iconPicture = "\ALRPClient\icons\messagepolice.paa";
+        description = "%1";
+        duration = 10;
+        priority = 6;
+    };
+
+    class AdminDispatch
+    {
+        title = "Admin Dispatch Center";
+        iconPicture = "\ALRPClient\icons\messageadmin.paa";
+        description = "%1";
+        duration = 10;
+        priority = 6;
+    };
+
+    class AdminMessage
+    {
+        title = "Admin Message";
+        iconPicture = "\ALRPClient\icons\messageadmin.paa";
+        description = "%1";
+        duration = 10;
+        priority = 5;
+    };
+};
+#include "infiSTAR_AdminMenu.hpp"
+#include "config\CfgActions.hpp"
+#include "config\CobraConfig.hpp"
